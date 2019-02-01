@@ -23,15 +23,15 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
   </head>
   <body>
      <div class="container-fluid">
-    <h3>Integrated Project Demo</h3>
+  <!--   <h3>Integrated Project Demo</h3> -->
     <!--The div element for the map -->
     <!-- Image and text -->
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
     <nav class="navbar navbar-dark bg-dark  " >
-  <a class="navbar-brand" href="#">
+  <a class="navbar-brand" href="../welcome.php">
     <img src="../photo/polyu.png" width="30" height="30" class="d-inline-block align-top" alt="">
-    My trips
+    EIE3117 - Integrated Project
   </a>    
 </nav>
 
@@ -41,6 +41,9 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 
   <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">My trips <span class="sr-only">(current)</span></a>
+      </li>
       <li class="nav-item active">
         <a class="nav-link" href="#">Profile <span class="sr-only">(current)</span></a>
       </li>
@@ -54,9 +57,9 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     <!-- card -->
     <div class="card text-center" style="width: 18rem;">
   <div class="card-body">
-    <h5 class="card-title">Special title treatment</h5>
-    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
+    <h5 class="card-title">Looks like you haven't taken a trip yet.</h5>
+    <p class="card-text">Book a car from a web browser, no app install necessary.</p>
+    <a href="looking.php" class="btn btn-primary">Request a Ride</a>
   </div>
    <!-- card -->
 </div>
