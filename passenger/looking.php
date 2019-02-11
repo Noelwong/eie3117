@@ -22,19 +22,34 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     </style>
   </head>
   <body>
+
      <div class="container-fluid">
-<div class="card mb-3">
-  <img class="card-img-top" src="..." alt="Card image cap">
-  <div class="card-body">
-    <h5 class="card-title">Use location services</h5>
-    <p class="card-text">Allow us to use location services to find your pickup address automatically.</p>
-    <button type="button" class="btn btn-primary btn-info btn-lg btn-block">USE LOCATION SERVICES</button>
-<button type="button" class="btn btn-secondary btn-lg btn-block">TYPE PICK UP ADDRESS</button>
-  </div>
-</div>
-</div>
+      <div class="card mb-3">
+     
+    <!--The div element for the map -->
+    <div id="map"></div>
+    <script>
+// Initialize and add the map
+function initMap() {
+  // The location of Uluru
+  var uluru = {lat: 22.304691, lng: 114.179596};
+  // The map, centered at Uluru
+  var map = new google.maps.Map(
+      document.getElementById('map'), {zoom: 17, center: uluru});
+  // The marker, positioned at Uluru
+  var marker = new google.maps.Marker({position: uluru, map: map});
+}
+    </script>
+          <div class="card-body">
+           <h5 class="card-title">Use location services</h5>
+          <p class="card-text">Allow us to use location services to find your pickup address automatically.</p>
+             <button  onclick="window.location.href='search/destination.php'" type="button" class="btn btn-primary btn-info btn-lg btn-block" >USE LOCATION SERVICES</button>
+              <button onclick="window.location.href='search/pickup.php'"type="button" class="btn btn-secondary btn-lg btn-block">TYPE PICK UP ADDRESS</button>
+           </div>
+          </div>
+        </div>
  <!-- <div class="container-fluid"> -->
-</div>
+      </div>
 
     <!--Load the API from the specified URL
     * The async attribute allows the browser to render the page while the API loads
