@@ -1,12 +1,36 @@
 <?php
 // Initialize the session
 session_start();
+require_once "config.php";
 
+$verified = $email = "";
 // Check if the user is logged in, if not then redirect him to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: login.php");
     exit;
+} 
+else {
+  //$sql = "SELECT id, username, password, email, verified FROM users WHERE username = :username";
+  //$verified = $row["verified"];
+  if($_SESSION["verified"] !== 1){
+    header("location: pleaseactivate.php");
+
+    /*$email = $row["email"];
+
+    $to = "charleswmc19970124@gmail.com"
+    $subject = "Testing";
+    $txt = "Hello, tesing for sending email";
+    $header = "From: eie3117group7b@gmail.com" . "\r\n" . "CC: somebodyelse@example.com";
+
+    mail($to, $subject, $txt, $header);*/
+
+  }
+
 }
+
+
+
+$sql = "SELECT id, username, password, verified FROM users WHERE username = :username";
 ?>
 
 <!DOCTYPE html>

@@ -2,10 +2,10 @@
 -- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Feb 01, 2019 at 08:09 AM
--- Server version: 10.1.37-MariaDB
--- PHP Version: 7.3.1
+-- 主機: 127.0.0.1:3306
+-- 產生時間： 2019 年 02 月 15 日 04:22
+-- 伺服器版本: 5.7.24
+-- PHP 版本： 7.2.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,119 +19,86 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `eie3117`
+-- 資料庫： `eie3117`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `drivers`
+-- 資料表結構 `drivers`
 --
 
-CREATE TABLE `drivers` (
+DROP TABLE IF EXISTS `drivers`;
+CREATE TABLE IF NOT EXISTS `drivers` (
   `username` varchar(20) NOT NULL,
   `carClass` varchar(20) NOT NULL,
   `carModel` varchar(20) NOT NULL,
-  `carPlateNum` int(11) NOT NULL
+  `carPlateNum` int(11) NOT NULL,
+  PRIMARY KEY (`username`),
+  UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `markers`
+-- 資料表結構 `markers`
 --
 
-CREATE TABLE `markers` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `markers`;
+CREATE TABLE IF NOT EXISTS `markers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(60) NOT NULL,
   `address` varchar(80) NOT NULL,
   `lat` float(10,6) NOT NULL,
   `lng` float(10,6) NOT NULL,
-  `type` varchar(30) NOT NULL
+  `type` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `passengers`
+-- 資料表結構 `passengers`
 --
 
-CREATE TABLE `passengers` (
+DROP TABLE IF EXISTS `passengers`;
+CREATE TABLE IF NOT EXISTS `passengers` (
   `username` text NOT NULL,
   `homeLocation` text NOT NULL,
-  `workLocation` text NOT NULL
+  `workLocation` text NOT NULL,
+  PRIMARY KEY (`username`(1))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- 資料表結構 `users`
 --
 
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   `phoneNumber` int(12) DEFAULT NULL,
   `email` text,
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `verified` int(11) NOT NULL COMMENT '0=no, 1=yes',
+  `verification_code` varchar(256) DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`username`),
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `id` (`id`),
+  UNIQUE KEY `id_2` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `users`
+-- 資料表的匯出資料 `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `phoneNumber`, `email`, `created_at`) VALUES
-(1, 'noel', '$2y$10$kDOV.n6gsibiyJRDCR1X9OU1GSvcFqu6swMh.fz.u45FsTpdCThuG', NULL, NULL, '2019-01-15 14:36:54'),
-(2, 'noelwong', '$2y$10$.kJhEOZcWtzCLvTEvA2QdOMJV2UCNyrgs7VLZ8ZQSXU5TV1hCbTQ.', NULL, NULL, '2019-01-30 18:56:24');
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `drivers`
---
-ALTER TABLE `drivers`
-  ADD PRIMARY KEY (`username`),
-  ADD UNIQUE KEY `username` (`username`);
-
---
--- Indexes for table `markers`
---
-ALTER TABLE `markers`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `passengers`
---
-ALTER TABLE `passengers`
-  ADD PRIMARY KEY (`username`(1));
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`username`),
-  ADD UNIQUE KEY `username` (`username`),
-  ADD UNIQUE KEY `id` (`id`),
-  ADD UNIQUE KEY `id_2` (`id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `markers`
---
-ALTER TABLE `markers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+INSERT INTO `users` (`id`, `username`, `password`, `phoneNumber`, `email`, `verified`, `verification_code`, `created_at`) VALUES
+(3, 'charleswmc', '$2y$10$GV8GjP/sFlArQj3EsqMpRemaqp74MSkhQblMy29ja4deiTgX0JpSq', 66452438, 'charleswmc19970124@gmail.com', 0, 'ad9a7155ffdf16110343bb8013301084', '2019-02-15 11:21:39'),
+(1, 'noel', '$2y$10$kDOV.n6gsibiyJRDCR1X9OU1GSvcFqu6swMh.fz.u45FsTpdCThuG', NULL, NULL, 0, NULL, '2019-01-15 14:36:54'),
+(2, 'noelwong', '$2y$10$.kJhEOZcWtzCLvTEvA2QdOMJV2UCNyrgs7VLZ8ZQSXU5TV1hCbTQ.', NULL, NULL, 0, NULL, '2019-01-30 18:56:24');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

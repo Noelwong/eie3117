@@ -1,5 +1,7 @@
 <?php
 // Initialize the session
+ini_set('session.cookie_lifetime', 60 * 60 * 24 * 365);
+ini_set('session.gc-maxlifetime', 60 * 60 * 24 * 365);
 session_start();
 
 // Check if the user is already logged in, if yes then redirect him to welcome page
@@ -12,7 +14,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 require_once "config.php";
 
 // Define variables and initialize with empty values
-$username = $password = "";
+$username = $password = $verified = "";
 $username_err = $password_err = "";
 
 // Processing form data when form is submitted
@@ -35,7 +37,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate credentials
     if(empty($username_err) && empty($password_err)){
         // Prepare a select statement
-        $sql = "SELECT id, username, password FROM users WHERE username = :username";
+        $sql = "SELECT id, username, password, verified FROM users WHERE username = :username";
 
         if($stmt = $pdo->prepare($sql)){
             // Bind variables to the prepared statement as parameters
@@ -52,17 +54,27 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         $id = $row["id"];
                         $username = $row["username"];
                         $hashed_password = $row["password"];
+                        $verified = $row["verified"];
                         if(password_verify($password, $hashed_password)){
                             // Password is correct, so start a new session
-                            session_start();
 
                             // Store data in session variables
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
                             $_SESSION["username"] = $username;
 
+                            setcookie("unm", $_POST["username"], time()+3600);
+                           
                             // Redirect user to welcome page
-                            header("location: welcome.php");
+                            if($verified == 1){
+                                $_SESSION["verified"] = 1;
+                                header("location: welcome.php");
+                                //setcookie("unm", $_POST["username"], time()+3600);
+                            }
+                            else {
+                                header("location: pleaseactivate.php");
+                            }
+                            
                         } else{
                             // Display an error message if password is not valid
                             $password_err = "The password you entered was not valid.";
@@ -104,7 +116,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
                 <label>Username</label>
-                <input type="text" name="username" class="form-control" value="<?php echo $username; ?>">
+                <input type="text" name="username" class="form-control">
                 <span class="help-block"><?php echo $username_err; ?></span>
             </div>
             <div class="form-group <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
@@ -112,11 +124,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <input type="password" name="password" class="form-control">
                 <span class="help-block"><?php echo $password_err; ?></span>
             </div>
+            
+
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Login">
             </div>
             <p>Don't have an account? <a href="register.php">Sign up now</a>.</p>
+            <p><a href="forgetpw.php">Forget password?</a></p>
         </form>
     </div>
+    <!--js-->
+    
 </body>
 </html>
