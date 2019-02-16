@@ -25,7 +25,50 @@ else {
     mail($to, $subject, $txt, $header);*/
 
   }
+  // check the user have registered passenger or not
+  $sql = "SELECT username FROM passengers WHERE username = :username";
+  if($stmt = $pdo->prepare($sql))
+  {
+      // Bind variables to the prepared statement as parameters
+      $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
 
+      // Set parameters
+      $param_username = $_SESSION['username'];
+
+      // Attempt to execute the prepared statement
+      if($stmt->execute())
+      {
+          if($stmt->rowCount() >= 1) { $_SESSION["passengers"] = true; }
+          else { $_SESSION["passengers"] = false; }
+      }
+      else
+      {
+          header("location: logout.php");
+          exit;
+      }
+  }
+    // check the user have registered driver or not
+  $sql = "SELECT username FROM drivers WHERE username = :username";
+  if($stmt = $pdo->prepare($sql))
+  {
+      // Bind variables to the prepared statement as parameters
+      $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
+
+      // Set parameters
+      $param_username = $_SESSION['username'];
+
+      // Attempt to execute the prepared statement
+      if($stmt->execute())
+      {
+          if($stmt->rowCount() >= 1) { $_SESSION["drivers"] = true; }
+          else { $_SESSION["drivers"] = false; }
+      }
+      else
+      {
+          header("location: logout.php");
+          exit;
+      }
+  }
 }
 
 
@@ -47,38 +90,34 @@ $sql = "SELECT id, username, password, verified FROM users WHERE username = :use
 
  
 <!-- Nav Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
     <nav class="navbar navbar-dark bg-dark  " >
-  <a class="navbar-brand" href="#">
-    <img src="photo/polyu.png" width="30" height="30" class="d-inline-block align-top" alt="">
-    EIE3117 - Integrated Project
-  </a>    
-</nav>
+      <a class="navbar-brand" href="#">
+        <img src="photo/polyu.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        EIE3117 - Integrated Project
+      </a>    
+    </nav>
 
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Driver <span class="sr-only">(current)</span></a>
-      </li>
-       <li class="nav-item active">
-        <a class="nav-link" href="#">Passenger <span class="sr-only">(current)</span></a>
-      </li>
-    </ul>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        <li class="nav-item active">
+          <a class="nav-link" href="driver/register.php">Driver <span class="sr-only">(current)</span></a>
+        </li>
+         <li class="nav-item active">
+          <a class="nav-link" href="passenger/home.php">Passenger <span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
     </div>
     <ul class="nav justify-content-end">
-    <li class="nav-item">
-      <a href="reset-password.php" class="nav-link disabled" >Reset Password</a>
-    </li>
-    <li class="nav-item">
-  <a href="logout.php" class="btn btn-danger">Sign Out</a>
-    </li>
-  </ul>
+      <li class="nav-item">
+        <a href="reset-password.php" class="nav-link disabled" >Reset Password</a>
+      </li>
+      <li class="nav-item">
+        <a href="logout.php" class="btn btn-danger">Sign Out</a>
+      </li>
+    </ul>
 
-    </nav>
+  </nav>
     <!-- Nav Bar -->
 
 
@@ -97,7 +136,7 @@ $sql = "SELECT id, username, password, verified FROM users WHERE username = :use
       <div class="card-body">
         <h5 class="card-title"><b>Driver</b></h5>
         <p class="card-text">Make the most of your time on the road with requests from the largest network of active riders.</p>
-        <a href="#" class="btn btn-primary">Drive</a>
+        <a href="driver/register.php" class="btn btn-primary">Drive</a>
       </div>
     </div>
   </div>
