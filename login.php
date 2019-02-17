@@ -3,7 +3,7 @@
 ini_set('session.cookie_lifetime', 60 * 60 * 24 * 365);
 ini_set('session.gc-maxlifetime', 60 * 60 * 24 * 365);
 session_start();
-
+//echo $_COOKIE["username"];
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     header("location: welcome.php");
@@ -63,7 +63,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             $_SESSION["id"] = $id;
                             $_SESSION["username"] = $username;
 
-                            setcookie("unm", $_POST["username"], time()+3600);
+                            //setcookie("unm", $_POST["username"], time()+3600);
                            
                             // Redirect user to welcome page
                             if($verified == 1){
@@ -92,10 +92,39 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         // Close statement
         unset($stmt);
     }
+$status = "";
+$status1 = "";
+$sql1 = "SELECT * FROM history WHERE passengerName = :username OR driverName = :username";
+
+if($stmt = $pdo->prepare($sql1)){
+    $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
+    $param_username = $_SESSION["username"];
+
+    if($stmt->execute()){
+        if($stmt->rowCount() >= 1){
+            $count = 0;
+            $records = $stmt->fetchAll();
+            foreach ($records as $record) {
+                $status = $record["status"];
+                $_SESSION["status"] = $status;
+                if($_SESSION["username"] == $record["passengerName"]){
+                    $status1 = 0;
+                    $_SESSION["status1"] = $status1;
+                }
+                else if($_SESSION["username"] == $record["driverName"]){
+                    $status1 = 1;
+                    $_SESSION["status1"] = $status1;
+                }
+            }                
+        }
+    }
+}
 
     // Close connection
     unset($pdo);
 }
+
+
 ?>
 
 <!DOCTYPE html>
