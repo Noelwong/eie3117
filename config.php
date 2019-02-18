@@ -4,7 +4,7 @@ server with default setting (user 'root' with no password) */
 define('DB_SERVER', 'localhost');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
-define('DB_NAME', 'EIE3117');
+define('DB_NAME', 'eie3117');
 
 /* Attempt to connect to MySQL database */
 try{
@@ -14,4 +14,6 @@ try{
 } catch(PDOException $e){
     die("ERROR: Could not connect. " . $e->getMessage());
 }
+
+ 
 ?>
