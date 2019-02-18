@@ -1,15 +1,14 @@
 <?php
 // Initialize the session
 session_start();
+
 include '../../locations_model.php';
-
-
-echo("<script>console.log('PHP: ".$_SESSION["username"]."');</script>");
 // Check if the user is logged in, if not then redirect him to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: login.php");
     exit;
 }
+
 
 ?>
 
@@ -35,13 +34,12 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     <script>
 
       // global scope
+      var startingLocation_placeID = "";
+      var destination_placeID ="";
 
    
       var polyu = {lat: 22.304691, lng: 114.179596};
-      var startingLocation = {lat: 0, lng: 0};
-      var destination = {lat: 0, lng: 0};
-      var startingLocation_placeID = "";
-      var destination_placeID ="";
+      var startingLocation = "";
 
 // Initialize and add the map
 function initMap() {
@@ -50,7 +48,6 @@ function initMap() {
     center: {lat: 22.304691, lng: 114.179596},
     zoom: 17
   });
- // $login_session = $row['username'];
 
        // HTML5 geolocation.
   if (navigator.geolocation) {
@@ -67,8 +64,7 @@ function initMap() {
             infoWindow.setContent('Location found.');
             infoWindow.open(map);
             map.setCenter(pos);
-            startingLocation = pos;
-            console.log(startingLocation);
+            // startingLocation = pos;
             directionsDisplay.setMap(map);
 
             geocoder.geocode({'location': pos}, function(results, status) {
@@ -134,10 +130,6 @@ console.log("AutocompleteDirectionsHandler "+ startingLocation);
   destinationAutocomplete.setFields(['place_id']);
 
 
-// var lat = place.geometry.location.lat(),
-//     lng = place.geometry.location.lng();
-
-
   this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
   this.setupPlaceChangedListener(destinationAutocomplete, 'DEST');
 
@@ -146,31 +138,6 @@ console.log("AutocompleteDirectionsHandler "+ startingLocation);
   //     destinationInput);
   // this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(modeSelector);
 }
-
-  function saveData() {
-            // var description = document.getElementById('manual_description').value;
-
-             // $login_session = $row['username']
-             var pickUpTime = document.getElementById('appt-time').value;
-             var tips = document.getElementById('tips').value;
-             var freeToll = document.getElementById('gridCheck').checked;
-
-
-            var url = 'locations_model.php?add_location&startingLocation_placeID=' +startingLocation_placeID+'&destination_placeID='+ destination_placeID+ '&pickUpTime= '+pickUpTime +'&tips=' + tips + '&freeToll=' + freeToll;
-
-            downloadUrl(url, function(data, responseCode) {
-                if (responseCode === 200  && data.length > 1) {
-                   alert("success!!!!");
-
-                }else{
-                    console.log(responseCode);
-                    console.log(data);
-                    infowindow.setContent("<div style='color: red; font-size: 25px;'>Inserting Errors</div>");
-                }
-            });
-
-   
-        }
 
 // Sets a listener on a radio button to change the filter type on Places
 // Autocomplete.
@@ -192,10 +159,7 @@ AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function(
 
   autocomplete.addListener('place_changed', function() {
     var place = autocomplete.getPlace();
-      // var lat = place.geometry.location.lat();
-      // var lng = place.geometry.location.lng();
-      // console.log(lat);
-    // console.log ("place.geometry.location.lat(): "+place.geometry.location.lat());
+
     if (!place.place_id) {
       window.alert('Please select an option from the dropdown list.');
       return;
@@ -203,12 +167,11 @@ AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function(
     if (mode === 'ORIG') {
       me.originPlaceId = place.place_id;
       startingLocation_placeID = place.place_id;
-
-    
+      console.log(startingLocation_placeID);
     } else {
       me.destinationPlaceId = place.place_id;
       destination_placeID = place.place_id;
-     
+      console.log(startingLocation_placeID);
     }
     me.route();
   });
@@ -234,11 +197,60 @@ AutocompleteDirectionsHandler.prototype.route = function() {
         }
       });
 };
+
+function saveData() {
+            // var description = document.getElementById('manual_description').value;
+
+             // $login_session = $row['username']
+             var pickUpTime = document.getElementById('appt-time').value;
+             var tips = document.getElementById('tips').value;
+             var freeToll = document.getElementById('gridCheck').checked;
+
+            console.log(startingLocation_placeID);
+             console.log(destination_placeID);
+             console.log(pickUpTime);
+             console.log(tips);
+             console.log(freeToll);
+
+          var url = '../../locations_model.php?add_location&startingLocation_placeID='+startingLocation_placeID+
+          '&destination_placeID='+ destination_placeID+ 
+          '&pickUpTime= '+pickUpTime +
+          '&tips=' + tips + 
+          '&freeToll=' + freeToll;
+
+             console.log(url);
+            downloadUrl(url, function(data, responseCode) {
+                if (responseCode === 200  && data.length > 1) {
+                   alert("success!!!!");
+
+                }else{
+                    console.log(responseCode);
+                    console.log(data);
+                    infowindow.setContent("<div style='color: red; font-size: 25px;'>Inserting Errors</div>");
+                }
+            });
+
+   
+        }
+
+         function downloadUrl(url, callback) {
+            var request = window.ActiveXObject ?
+                new ActiveXObject('Microsoft.XMLHTTP') :
+                new XMLHttpRequest;
+
+            request.onreadystatechange = function() {
+                if (request.readyState == 4) {
+                    callback(request.responseText, request.status);
+                }
+            };
+
+            request.open('GET', url, true);
+            request.send(null);
+        }
     </script>
           <div class="card-body">
            <h5 class="card-title">Welcome to Weber</h5>
           <p class="card-text">Allow us to use location services to find your pickup address automatically.</p>
-          <form>
               <input type="text"  class="form-control form-control-lg" id="startingLocation-input" placeholder="Starting:">
               <input type="text"  class="form-control form-control-lg" id="destination-input" placeholder="Destination:">
       
@@ -268,7 +280,7 @@ AutocompleteDirectionsHandler.prototype.route = function() {
   <div class="input-group-prepend">
     <span class="input-group-text">$</span>
   </div>
-  <input id= "tips" type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+  <input id="tips" type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
   <div class="input-group-append">
     <span class="input-group-text">.00</span>
   </div>
@@ -279,23 +291,21 @@ AutocompleteDirectionsHandler.prototype.route = function() {
   </div>
   <div class="form-group">
     <div class="form-check">
-      <input class="form-check-input" type="checkbox" id="gridCheck" >
+      <input class="form-check-input" type="checkbox" id="gridCheck">
       <label class="form-check-label" for="gridCheck">
        Free toll
       </label>
     </div>
   </div>
-</form>
   <!-- <button type="submit" class="btn btn-primary">Sign in</button> -->
 </form>
   </div>
 </div>
-            <button type="submit" class="btn btn-secondary" onclick="saveData()">Next</button>
+            <button type="button" class="btn btn-secondary" onclick="saveData()">Next</button>
           </div>
         </div>
  <!-- <div class="container-fluid"> -->
       </div>
-      <p><a href="../looking.php">Previous Page</a></p>
 
     <!--Load the API from the specified URL
     * The async attribute allows the browser to render the page while the API loads

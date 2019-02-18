@@ -6,9 +6,8 @@ require_once ("PHPMailer/PHPMailer.php");
 //session_start();
 //REQUIRE_ONCE "PHPmailer";
 // Define variables and initialize with empty values
-$username = $password = $confirm_password = $phoneNumber = $email = $verified = $verification_code = "";
+$username = $password = $confirm_password = $phoneNumber = $email = $verified = $verification_code = "";            //data need to be stored in the users database
 $username_err = $password_err = $confirm_password_err = $phoneNumber_err = $email_err = $verified_err = "";
-
 
 $verified = 0;
 // Processing form data when form is submitted
@@ -34,6 +33,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     $username_err = "This username is already taken.";
                 } else{
                     $username = trim($_POST["username"]);
+                    setcookie("c_username", $username, time()+3600);
                 }
             } else{
                 echo "Oops! Something went wrong. Please try again later.";
@@ -125,9 +125,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 echo "Oops! Something went wrong. Please try again later.";
             }
         }
-    }
-
-  
+    }   
 
         /*else{
         $email = trim($_POST["email"]);
@@ -146,7 +144,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
             $stmt->bindParam(":phoneNumber", $param_phoneNumber, PDO::PARAM_STR);
             $stmt->bindParam(":verified", $param_verified, PDO::PARAM_STR);
-            $stmt->bindParam(":verification_code", $param_verification_code, PDO::PARAM_STR);
+            $stmt->bindParam("verification_code", $param_verification_code, PDO::PARAM_STR);
 
 
             // Set parameters
@@ -160,7 +158,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             // Attempt to execute the prepared statement
             if($stmt->execute()){
                 // Redirect to login page
-                header("location: login.php");
+                header("location: register1.php");
             } else{
                 echo "Something went wrong. Please try again later.";
             }
@@ -233,8 +231,7 @@ mail($to, $subject, $htmlStr, $header);
                 <input type="email" name="email" class="form-control" value="<?php echo $email; ?>">
                 <span class="help-block"><?php echo $email_err; ?></span>
             </div>
-            <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Submit">
+                <input type="submit" class="btn btn-primary" value="NEXT">
                 <input type="reset" class="btn btn-default" value="Reset">
             </div>
             <p>Already have an account? <a href="login.php">Login here</a>.</p>

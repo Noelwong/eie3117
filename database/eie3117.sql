@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機: 127.0.0.1:3306
--- 產生時間： 2019 年 02 月 15 日 04:22
+-- 產生時間： 2019 年 02 月 15 日 05:32
 -- 伺服器版本: 5.7.24
 -- PHP 版本： 7.2.14
 
@@ -89,16 +89,16 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `id_2` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 --
 -- 資料表的匯出資料 `users`
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `phoneNumber`, `email`, `verified`, `verification_code`, `created_at`) VALUES
-(3, 'charleswmc', '$2y$10$GV8GjP/sFlArQj3EsqMpRemaqp74MSkhQblMy29ja4deiTgX0JpSq', 66452438, 'charleswmc19970124@gmail.com', 0, 'ad9a7155ffdf16110343bb8013301084', '2019-02-15 11:21:39'),
+(3, 'charleswmc', '$2y$10$dDiVs8ZonLhb8GY67rhmeOh4DKbgpgrlXkElpQ0JRFYmYTg/.pH26', 66452438, 'charleswmc19970124@gmail.com', 1, 'ad9a7155ffdf16110343bb8013301084', '2019-02-15 11:21:39'),
 (1, 'noel', '$2y$10$kDOV.n6gsibiyJRDCR1X9OU1GSvcFqu6swMh.fz.u45FsTpdCThuG', NULL, NULL, 0, NULL, '2019-01-15 14:36:54'),
-(2, 'noelwong', '$2y$10$.kJhEOZcWtzCLvTEvA2QdOMJV2UCNyrgs7VLZ8ZQSXU5TV1hCbTQ.', NULL, NULL, 0, NULL, '2019-01-30 18:56:24');
+(4, 'noelwong', '$2y$10$ZWbmU2QKinjruSgBzc/gAOsqidxjl5bzBbN3vHFyao7jmhr2mYSz2', 97152139, 'noelwong.whl@gmail.com', 1, 'a1953c86b36a4ef8218ddd53c0bdd597', '2019-02-15 13:29:33');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

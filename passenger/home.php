@@ -7,54 +7,6 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: login.php");
     exit;
 }
-else
-{
-  $sql = "SELECT passsengerName from pending where passengerName = :username";
-  if($stmt = $pdo->prepare($sql)){
-            // Bind variables to the prepared statement as parameters
-            $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
-
-            // Set parameters
-            $param_username = $_SESSION['username'];
-
-            // Attempt to execute the prepared statement
-            if($stmt->execute()){
-                if($stmt->rowCount() == 1){
-                    //have pending request
-
-                } else{
-                    //no pending request
-                      $sql = "SELECT passsengerName from history where passengerName = :username and status = 1";
-                    if($stmt1 = $pdo->prepare($sql)){
-                              // Bind variables to the prepared statement as parameters
-                              $stmt1->bindParam(":username", $param_username, PDO::PARAM_STR);
-
-                              // Set parameters
-                              $param_username = $_SESSION['username'];
-
-                              // Attempt to execute the prepared statement
-                              if($stmt1->execute()){
-                                  if($stmt1->rowCount() == 1){
-                                      //have accepted request
-
-                                  } else{
-                                      //no accpeted request
-                                      
-
-                                  }
-                              } else{
-                                  echo "Oops! Something went wrong. Please try again later.";
-                              }
-                          }
-
-                }
-            } else{
-                echo "Oops! Something went wrong. Please try again later.";
-            }
-        }
-
-
-}
 ?>
 
 <!DOCTYPE html>
@@ -119,8 +71,8 @@ else
     * The key parameter will contain your own API key (which is not needed for this tutorial)
     * The callback parameter executes the initMap() function
     -->
-   <!--  <script async defer
+    <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDQSwfy3WYNrr2lOvQTPfbGHVHpPxuUus&callback=initMap">
-    </script> -->
+    </script>
   </body>
 </html>

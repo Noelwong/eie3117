@@ -4,7 +4,7 @@ require_once "config.php";
 $new_pw = "";
 $new_pw = $_COOKIE["c_new_pw"];
 $username = $_COOKIE["c_username"];
-
+echo $_COOKIE["c_new_pw"];
 //$sql = "SELECT email, verified FROM users ";
 $sql = "UPDATE users SET password = :password WHERE username = :username";
 if($stmt = $pdo->prepare($sql)){
@@ -20,7 +20,7 @@ if($stmt = $pdo->prepare($sql)){
         echo "This is a problem. We cannot reset your password.";
     }
 }
-
+unset($_COOKIE["c_new_pw"]);
 ?>
 
 
