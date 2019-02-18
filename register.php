@@ -146,7 +146,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $stmt->bindParam(":email", $param_email, PDO::PARAM_STR);
             $stmt->bindParam(":phoneNumber", $param_phoneNumber, PDO::PARAM_STR);
             $stmt->bindParam(":verified", $param_verified, PDO::PARAM_STR);
-            $stmt->bindParam("verification_code", $param_verification_code, PDO::PARAM_STR);
+            $stmt->bindParam(":verification_code", $param_verification_code, PDO::PARAM_STR);
 
 
             // Set parameters

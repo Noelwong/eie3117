@@ -9,50 +9,6 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 }
 else
 {
-  $sql = "SELECT passsengerName from pending where passengerName = :username";
-  if($stmt = $pdo->prepare($sql)){
-            // Bind variables to the prepared statement as parameters
-            $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
-
-            // Set parameters
-            $param_username = $_SESSION['username'];
-
-            // Attempt to execute the prepared statement
-            if($stmt->execute()){
-                if($stmt->rowCount() == 1){
-                    //have pending request
-
-                } else{
-                    //no pending request
-                      $sql = "SELECT passsengerName from history where passengerName = :username and status = 1";
-                    if($stmt1 = $pdo->prepare($sql)){
-                              // Bind variables to the prepared statement as parameters
-                              $stmt1->bindParam(":username", $param_username, PDO::PARAM_STR);
-
-                              // Set parameters
-                              $param_username = $_SESSION['username'];
-
-                              // Attempt to execute the prepared statement
-                              if($stmt1->execute()){
-                                  if($stmt1->rowCount() == 1){
-                                      //have accepted request
-
-                                  } else{
-                                      //no accpeted request
-                                      
-
-                                  }
-                              } else{
-                                  echo "Oops! Something went wrong. Please try again later.";
-                              }
-                          }
-
-                }
-            } else{
-                echo "Oops! Something went wrong. Please try again later.";
-            }
-        }
-
 
 }
 ?>
@@ -105,9 +61,9 @@ else
     <!-- card -->
     <div class="card text-center" style="width: 18rem;">
   <div class="card-body">
-    <h5 class="card-title">Looks like you haven't taken a trip yet.</h5>
-    <p class="card-text">Book a car from a web browser, no app install necessary.</p>
-    <a href="looking.php" class="btn btn-primary">Request a Ride</a>
+    <h5 class="card-title">Waiting a diver..</h5>
+    <!-- <p class="card-text">Book a car from a web browser, no app install necessary.</p> -->
+    <!-- <a href="looking.php" class="btn btn-primary">Request a Ride</a> -->
   </div>
    <!-- card -->
 </div>
