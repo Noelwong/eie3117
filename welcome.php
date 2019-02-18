@@ -10,29 +10,40 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     exit;
 } 
 else {
-  //$sql = "SELECT id, username, password, email, verified FROM users WHERE username = :username";
-  //$verified = $row["verified"];
   if($_SESSION["verified"] !== 1){
     header("location: pleaseactivate.php");
-
-    /*$email = $row["email"];
-
-    $to = "charleswmc19970124@gmail.com"
-    $subject = "Testing";
-    $txt = "Hello, tesing for sending email";
-    $header = "From: eie3117group7b@gmail.com" . "\r\n" . "CC: somebodyelse@example.com";
-
-    mail($to, $subject, $txt, $header);*/
-
   }
-
 }
 
+//$_SESSION["status1"] = "";
 
+$status1 = "";
+$sql1 = "SELECT * FROM history WHERE passengerName = :username OR driverName = :username";
 
-$sql = "SELECT id, username, password, verified FROM users WHERE username = :username";
+if($stmt = $pdo->prepare($sql1)){
+    $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
+    $param_username = $_SESSION["username"];
+
+    if($stmt->execute()){
+        if($stmt->rowCount() >= 1){
+            $count = 0;
+            $records = $stmt->fetchAll();
+            foreach ($records as $record) {
+                $status = $record["status"];
+                $_SESSION["status"] = $status;
+                if($_SESSION["username"] == $record["passengerName"]){
+                    $_SESSION["requestIdendity"] = "passenger";
+                }
+                else if($_SESSION["username"] == $record["driverName"]){
+                    $status1 = 2;
+                    $_SESSION["requestIdendity"] = "driver";
+                }
+            }
+            //$_SESSION["status1"] = "";                
+        }
+    }
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,6 +78,12 @@ $sql = "SELECT id, username, password, verified FROM users WHERE username = :use
        <li class="nav-item active">
         <a class="nav-link" href="#">Passenger <span class="sr-only">(current)</span></a>
       </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="currentRequest.php">Current Request<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="history.php">History<span class="sr-only">(current)</span></a>
+      </li>
     </ul>
     </div>
     <ul class="nav justify-content-end">
@@ -97,7 +114,7 @@ $sql = "SELECT id, username, password, verified FROM users WHERE username = :use
       <div class="card-body">
         <h5 class="card-title"><b>Driver</b></h5>
         <p class="card-text">Make the most of your time on the road with requests from the largest network of active riders.</p>
-        <a href="#" class="btn btn-primary">Drive</a>
+        <a href="driver/home.php" class="btn btn-primary">Drive</a>
       </div>
     </div>
   </div>
