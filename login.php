@@ -3,7 +3,7 @@
 ini_set('session.cookie_lifetime', 60 * 60 * 24 * 365);
 ini_set('session.gc-maxlifetime', 60 * 60 * 24 * 365);
 session_start();
-//echo $_COOKIE["username"];
+
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     header("location: welcome.php");
@@ -63,7 +63,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             $_SESSION["id"] = $id;
                             $_SESSION["username"] = $username;
 
-                            //setcookie("unm", $_POST["username"], time()+3600);
+                            setcookie("unm", $_POST["username"], time()+3600);
                            
                             // Redirect user to welcome page
                             if($verified == 1){
@@ -93,12 +93,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         unset($stmt);
     }
 
-
     // Close connection
     unset($pdo);
 }
-
-
 ?>
 
 <!DOCTYPE html>

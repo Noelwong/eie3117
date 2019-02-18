@@ -1,15 +1,16 @@
 <?php
 // Initialize the session
 session_start();
-include '../../locations_model.php';
 
-
-echo("<script>console.log('PHP: ".$_SESSION["username"]."');</script>");
+// include '../../locations_model.php';
 // Check if the user is logged in, if not then redirect him to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: login.php");
     exit;
 }
+
+// $random = $_POST["id"];
+// echo $random;
 
 ?>
 
@@ -35,13 +36,12 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     <script>
 
       // global scope
+      var startingLocation_placeID = "";
+      var destination_placeID ="";
 
    
       var polyu = {lat: 22.304691, lng: 114.179596};
-      var startingLocation = {lat: 0, lng: 0};
-      var destination = {lat: 0, lng: 0};
-      var startingLocation_placeID = "";
-      var destination_placeID ="";
+      var startingLocation = "";
 
 // Initialize and add the map
 function initMap() {
@@ -50,7 +50,6 @@ function initMap() {
     center: {lat: 22.304691, lng: 114.179596},
     zoom: 17
   });
- // $login_session = $row['username'];
 
        // HTML5 geolocation.
   if (navigator.geolocation) {
@@ -67,8 +66,7 @@ function initMap() {
             infoWindow.setContent('Location found.');
             infoWindow.open(map);
             map.setCenter(pos);
-            startingLocation = pos;
-            console.log(startingLocation);
+            // startingLocation = pos;
             directionsDisplay.setMap(map);
 
             geocoder.geocode({'location': pos}, function(results, status) {
@@ -97,6 +95,7 @@ function initMap() {
   }     
 
      new AutocompleteDirectionsHandler(map);
+
 }
   function handleLocationError(browserHasGeolocation, infoWindow, pos) {
         infoWindow.setPosition(pos);
@@ -134,43 +133,44 @@ console.log("AutocompleteDirectionsHandler "+ startingLocation);
   destinationAutocomplete.setFields(['place_id']);
 
 
-// var lat = place.geometry.location.lat(),
-//     lng = place.geometry.location.lng();
-
-
   this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
   this.setupPlaceChangedListener(destinationAutocomplete, 'DEST');
 
+  var input = document.getElementById("destination-input").value;
+  var startingLocation_input = document.getElementById("startingLocation-input").value;
+
+  var options = {}
+  var autocomplete_new = new google.maps.places.Autocomplete(destinationInput, options);
+  var autocomplete_new_startingLocation = new google.maps.places.Autocomplete(originInput, options);
+
+//destination_LatLng
+  autocomplete_new.addListener('place_changed', function() {
+    var place = autocomplete_new.getPlace();
+    var lat = place.geometry.location.lat();
+    var lng = place.geometry.location.lng();
+    document.getElementById("destination_lat").value = lat;
+    document.getElementById("destination_lng").value = lng;
+    console.log(lat);
+    console.log(lng);
+    });
+//StartingLocation_LatLng
+   autocomplete_new_startingLocation.addListener('place_changed', function() {
+    var place = autocomplete_new_startingLocation.getPlace();
+    var lat = place.geometry.location.lat();
+    var lng = place.geometry.location.lng();
+    document.getElementById("startingLocation_lat").value = lat;
+    document.getElementById("startingLocation_lng").value = lng;
+    console.log(lat);
+    console.log(lng);
+    })
   // this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
   // this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(
   //     destinationInput);
   // this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(modeSelector);
 }
 
-  function saveData() {
-            // var description = document.getElementById('manual_description').value;
-
-             // $login_session = $row['username']
-             var pickUpTime = document.getElementById('appt-time').value;
-             var tips = document.getElementById('tips').value;
-             var freeToll = document.getElementById('gridCheck').checked;
 
 
-            var url = 'locations_model.php?add_location&startingLocation_placeID=' +startingLocation_placeID+'&destination_placeID='+ destination_placeID+ '&pickUpTime= '+pickUpTime +'&tips=' + tips + '&freeToll=' + freeToll;
-
-            downloadUrl(url, function(data, responseCode) {
-                if (responseCode === 200  && data.length > 1) {
-                   alert("success!!!!");
-
-                }else{
-                    console.log(responseCode);
-                    console.log(data);
-                    infowindow.setContent("<div style='color: red; font-size: 25px;'>Inserting Errors</div>");
-                }
-            });
-
-   
-        }
 
 // Sets a listener on a radio button to change the filter type on Places
 // Autocomplete.
@@ -192,10 +192,7 @@ AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function(
 
   autocomplete.addListener('place_changed', function() {
     var place = autocomplete.getPlace();
-      // var lat = place.geometry.location.lat();
-      // var lng = place.geometry.location.lng();
-      // console.log(lat);
-    // console.log ("place.geometry.location.lat(): "+place.geometry.location.lat());
+
     if (!place.place_id) {
       window.alert('Please select an option from the dropdown list.');
       return;
@@ -204,11 +201,15 @@ AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function(
       me.originPlaceId = place.place_id;
       startingLocation_placeID = place.place_id;
 
-    
+      document.getElementById("startingLocation_placeID").value = startingLocation_placeID;
+
+      console.log(startingLocation_placeID);
     } else {
       me.destinationPlaceId = place.place_id;
       destination_placeID = place.place_id;
-     
+      console.log(startingLocation_placeID);
+
+       document.getElementById("destination_placeID").value = destination_placeID;
     }
     me.route();
   });
@@ -234,13 +235,78 @@ AutocompleteDirectionsHandler.prototype.route = function() {
         }
       });
 };
+
+// function saveData() {
+            // var description = document.getElementById('manual_description').value;
+
+// var url = window.location.href;
+// var params = url.split('?ID=');
+// var id = (params[1]);
+//         $.ajax({
+//         type:"POST",
+//         url:"page.php",
+//         data:{id:id},
+//         success:function(result){
+//         $("#content").html(result);
+//         }
+//         });
+
+             // $login_session = $row['username']
+             // var pickUpTime = document.getElementById('appt-time').value;
+             // var tips = document.getElementById('tips').value;
+             // var freeToll = document.getElementById('gridCheck').checked;
+
+          //   console.log(startingLocation_placeID);
+          //    console.log(destination_placeID);
+          //    console.log(pickUpTime);
+          //    console.log(tips);
+          //    console.log(freeToll);
+
+          // var url = '../../locations_model.php?add_location&startingLocation_placeID='+startingLocation_placeID+
+          // '&destination_placeID='+ destination_placeID+ 
+          // '&pickUpTime= '+pickUpTime +
+          // '&tips=' + tips + 
+          // '&freeToll=' + freeToll;
+
+          //    console.log(url);
+          //   downloadUrl(url, function(data, responseCode) {
+          //       if (responseCode === 200  && data.length > 1) {
+          //          alert("success!!!!");
+
+          //       }else{
+          //           console.log(responseCode);
+          //           console.log(data);
+          //           infowindow.setContent("<div style='color: red; font-size: 25px;'>Inserting Errors</div>");
+          //       }
+          //   });
+
+   
+        // }
+
+         function downloadUrl(url, callback) {
+            var request = window.ActiveXObject ?
+                new ActiveXObject('Microsoft.XMLHTTP') :
+                new XMLHttpRequest;
+
+            request.onreadystatechange = function() {
+                if (request.readyState == 4) {
+                    callback(request.responseText, request.status);
+                }
+            };
+
+            request.open('GET', url, true);
+            request.send(null);
+        }
+
+  
+
     </script>
+<form action="../../locations_model.php" method="post">
           <div class="card-body">
            <h5 class="card-title">Welcome to Weber</h5>
           <p class="card-text">Allow us to use location services to find your pickup address automatically.</p>
-          <form>
-              <input type="text"  class="form-control form-control-lg" id="startingLocation-input" placeholder="Starting:">
-              <input type="text"  class="form-control form-control-lg" id="destination-input" placeholder="Destination:">
+              <input type="text"  class="form-control form-control-lg" id="startingLocation-input" name="startingLocation_addr" placeholder="Starting:">
+              <input type="text"  class="form-control form-control-lg" id="destination-input" name="destination_addr" placeholder="Destination:">
       
           
            <button class="btn btn-info"" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
@@ -248,61 +314,66 @@ AutocompleteDirectionsHandler.prototype.route = function() {
             </button>
            </div>
            
-           
+  
           
           <div class="collapse" id="collapseExample">
           <div class="card card-body">
-    <form>
-  <div class="form-row">
-    <div class="form-group col-md-6">
-      <label for="inputEmail4">Pick up time</label>
-      <div>
 
-      <input id="appt-time" type="time" name="appt-time" value="13:30">
-    </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputEmail4">Pick up time</label>
+          <div>
+            <input id="appt-time"  type="time" name="pickUpTime" value="13:30">
+          </div>
       <!-- <input type="email" class="form-control" id="inputEmail4" placeholder="Email"> -->
-    </div>
-    <div class="form-group col-md-6">
-      <label for="inputPassword4">Tips</label>
-      <div class="input-group mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text">$</span>
-  </div>
-  <input id= "tips" type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-  <div class="input-group-append">
-    <span class="input-group-text">.00</span>
-  </div>
-</div>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputPassword4">Tips</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">$</span>
+              </div>
+            <input id="tips" name="tips" type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+              <div class="input-group-append">
+                <span class="input-group-text">.00</span>
+              </div>
+            </div>
       <!-- <input type="password" class="form-control" id="inputPassword4" placeholder="Password"> -->
-
-    </div>
-  </div>
+          </div>
+        </div>
   <div class="form-group">
     <div class="form-check">
-      <input class="form-check-input" type="checkbox" id="gridCheck" >
+      <input class="form-check-input" type="checkbox" id="gridCheck" name="freeToll" value="1">
       <label class="form-check-label" for="gridCheck">
        Free toll
       </label>
     </div>
   </div>
-</form>
   <!-- <button type="submit" class="btn btn-primary">Sign in</button> -->
-</form>
+
   </div>
 </div>
-            <button type="submit" class="btn btn-secondary" onclick="saveData()">Next</button>
+
+<input id = "startingLocation_placeID" type="hidden" name="startingLocation_placeID" value="" ></input>
+<input id = "destination_placeID"type="hidden" name="destination_placeID" value="" /></input>
+<input id = "startingLocation_lat"type="hidden" name="startingLocation_lat" value="" /></input>
+<input id = "startingLocation_lng"type="hidden" name="startingLocation_lng" value="" /></input>
+<input id = "destination_lat"type="hidden" name="destination_lat" value="" /></input>
+<input id = "destination_lng"type="hidden" name="destination_lng" value="" /></input>
+            <button type="submit" name="request_submit" class="btn btn-secondary" >Next</button>
           </div>
         </div>
+    
  <!-- <div class="container-fluid"> -->
       </div>
-      <p><a href="../looking.php">Previous Page</a></p>
-
+    </form>
     <!--Load the API from the specified URL
     * The async attribute allows the browser to render the page while the API loads
     * The key parameter will contain your own API key (which is not needed for this tutorial)
     * The callback parameter executes the initMap() function
     -->
-   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDQSwfy3WYNrr2lOvQTPfbGHVHpPxuUus&libraries=places&callback=initMap"
+   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDQSwfy3WYNrr2lOvQTPfbGHVHpPxuUus&libraries=places&callback=initMap&language=en-GB"
         async defer></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>

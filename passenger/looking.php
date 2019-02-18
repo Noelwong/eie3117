@@ -21,39 +21,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
        }
     </style>
   </head>
-    <body>
-     <div class="container-fluid">
-  <!--   <h3>Integrated Project Demo</h3> -->
-    <!--The div element for the map -->
-    <!-- Image and text -->
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-    <nav class="navbar navbar-dark bg-dark  " >
-  <a class="navbar-brand" href="../welcome.php">
-    <img src="../photo/polyu.png" width="30" height="30" class="d-inline-block align-top" alt="">
-    EIE3117 - Integrated Project
-  </a>    
-</nav>
-
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">My trips <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Profile <span class="sr-only">(current)</span></a>
-      </li>
-       <li class="nav-item active">
-        <a class="nav-link" href="#">History <span class="sr-only">(current)</span></a>
-      </li>
-    </ul>
-    </div>
-
-    </nav>
+  <body>
 
      <div class="container-fluid">
       <div class="card mb-3">
@@ -76,7 +44,7 @@ function initMap() {
            <h5 class="card-title">Use location services</h5>
           <p class="card-text">Allow us to use location services to find your pickup address automatically.</p>
              <button  onclick="window.location.href='search/destination.php'" type="button" class="btn btn-primary btn-info btn-lg btn-block" >USE LOCATION SERVICES</button>
-              <button onclick="window.location.href='search/text_input.php'"type="button" class="btn btn-secondary btn-lg btn-block">TYPE PICK UP ADDRESS</button>
+              <button onclick="window.location.href='search/pickup.php'"type="button" class="btn btn-secondary btn-lg btn-block">TYPE PICK UP ADDRESS</button>
            </div>
           </div>
         </div>
@@ -91,6 +59,5 @@ function initMap() {
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDQSwfy3WYNrr2lOvQTPfbGHVHpPxuUus&callback=initMap">
     </script>
-    <p><a href="home.php">Previous Page</a></p>
   </body>
 </html>
