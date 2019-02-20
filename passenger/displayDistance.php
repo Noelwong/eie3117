@@ -73,7 +73,7 @@ require_once "../config.php";
 
 $sql = "SELECT * FROM drivers";
 
-    if($stmt = $pdo->prepare($sql)){
+if($stmt = $pdo->prepare($sql)){
     $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
     $param_username = $_SESSION["username"];
 
@@ -93,7 +93,8 @@ $sql = "SELECT * FROM drivers";
         }
     }
 }
-
+unset($stmt);
+unset($pdo);
 ?>
             </form>
         </tbody>
