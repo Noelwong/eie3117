@@ -105,7 +105,7 @@ if(isset($_POST['submit']))
 }*/
 $phoneNo = "";
 
-$sql = "SELECT * FROM history WHERE passengerName = :username OR driverName = :username";
+$sql = "SELECT * FROM history WHERE passengerName = :username";
 
     if($stmt = $pdo->prepare($sql)){
 	$stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
@@ -136,12 +136,12 @@ $sql = "SELECT * FROM history WHERE passengerName = :username OR driverName = :u
                     echo "<input type=\"hidden\" name=\"pickupTime\" value=\"".$record["pickUpTime"]."\" /> ";
                     //echo "<input type=\"hidden\" name=\"status\" value=\"".$record["status"]."\" /> ";
                     //echo "<input type=\"hidden\" name=\"freeToll\" value=\"".$record["freeToll"]."\" /> ";
-                    echo "<input type=\"hidden\" name=\"tips\" value=\"".$record["status"]."\" /> ";
-                    echo "<td>".$record["passengerName"]."</td><td>".$record["driverName"]."</td><td>";
-                    echo $record["startingLocation_lat"]."</td><td>".$record["destination_lat"]."</td>";
+                    echo "<input type=\"hidden\" name=\"tips\" value=\"".$record["tips"]."\" /> ";
+                    echo "<td>".$record["passengerName"]."</td><td>".$record["driverName"]."</td>";
+                    echo "<td>".$record["startingLocation_lat"]."</td><td>".$record["destination_lat"]."</td>";
                     echo "<td>".$record["pickUpTime"]."</td>";
                     echo "<td>".$record["status"]."</td>";
-                    echo "<td><input type=\"submit\" name=\"submit\" class=\"btn btn-primary mx-auto\" value=\"Driver phone no.\"></td>";
+                    echo "<td>(Driver phone no.)</td>";
 
                     echo "<td><input type=\"submit\" name=\"submit".$count."\" class=\"btn btn-primary mx-auto\" value=\"Cancel\"></td>";
 

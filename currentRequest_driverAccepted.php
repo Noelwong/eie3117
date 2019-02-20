@@ -78,7 +78,7 @@ require_once "config.php";
 
 $startingLocation_lat = $destination_lat = $pickUpTime = "";
 
-if(isset($_POST['submit1']))
+if(isset($_POST['cancel']))
 {
     echo "<script type=\"text/javascript\">alert(\"Cancel pressed!!\");</script>";
     header("location: cancelRequest_confirm.php");
@@ -109,8 +109,11 @@ if(isset($_POST['startride']))
 	    if($stmt->execute())
 	    {
 	    }
+        unset($stmt);
 	}
+    unset($pdo);
     header("location: currentRequest_driverStarted.php");
+    exit;
 }
 else if(isset($_POST['Refresh']))
 {
@@ -125,49 +128,49 @@ $sql = "SELECT * FROM history WHERE passengerName = :username OR driverName = :u
     $param_username = $_SESSION["username"];
 
 
-    if($stmt->execute())
+if($stmt->execute())
+{
+    if($stmt->rowCount() >= 1)
     {
-        if($stmt->rowCount() >= 1)
-        {
-            $count = 0;
-            $records = $stmt->fetchAll();
-            foreach ($records as $record) {
-                if($record["status"] == 3){
-                   
-                }
-                else{
-                    echo "<form id=\"form".++$count."\" active=\"".htmlspecialchars($_SERVER["PHP_SELF"])."\" method=\"post\">";
-                    echo "<tr><th scope=\"row\">".$count."</th>";
-                    echo "<input type=\"hidden\" name=\"passenger\" value=\"".$record["passengerName"]."\" /> ";
-                    echo "<input type=\"hidden\" name=\"startingLocation_addr\" value=\"".$record["startingLocation_lat"]."\" /> ";
-                    echo "<input type=\"hidden\" name=\"destination_addr\" value=\"".$record["destination_lat"]."\" /> ";
-                    echo "<input type=\"hidden\" name=\"pickupTime\" value=\"".$record["pickUpTime"]."\" /> ";
-                    //echo "<input type=\"hidden\" name=\"status\" value=\"".$record["status"]."\" /> ";
-                    //echo "<input type=\"hidden\" name=\"freeToll\" value=\"".$record["freeToll"]."\" /> ";
-                    echo "<input type=\"hidden\" name=\"tips\" value=\"".$record["status"]."\" /> ";
-                    echo "<td>".$record["passengerName"]."</td><td>".$record["driverName"]."</td><td>";
-                    echo $record["startingLocation_lat"]."</td><td>".$record["destination_lat"]."</td>";
-                    echo "<td>".$record["pickUpTime"]."</td><td>";
-                    echo "<td>".$record["status"]."</td><td>";
-                    $_SESSION["status"] = $record["status"];
-                    echo "<td><input type=\"submit\" name=\"submit".$count."\" class=\"btn btn-primary mx-auto\" value=\"Cancel\"></td>";
-                    echo "<td><input type=\"submit\" name=\"startride\" class=\"btn btn-primary mx-auto\" value=\"StartRide\"></td>";
-                    //echo "<td><input type=\"submit\" name=\"Complete\" class=\"btn btn-primary mx-auto\" value=\"Complete\"></td></tr>";
-                    echo "</form>";
-                /*echo "<input type=\"hidden\" name=\"passenger\" value=\"".$record["passengerName"]."\" /> ";
-
+        $count = 0;
+        $records = $stmt->fetchAll();
+        foreach ($records as $record) {
+            if($record["status"] == 3){
+               
+            }
+            else{
+                echo "<form id=\"form".++$count."\" active=\"".htmlspecialchars($_SERVER["PHP_SELF"])."\" method=\"post\">";
+                echo "<tr><th scope=\"row\">".$count."</th>";
+                echo "<input type=\"hidden\" name=\"passenger\" value=\"".$record["passengerName"]."\" /> ";
                 echo "<input type=\"hidden\" name=\"startingLocation_addr\" value=\"".$record["startingLocation_lat"]."\" /> ";
                 echo "<input type=\"hidden\" name=\"destination_addr\" value=\"".$record["destination_lat"]."\" /> ";
-                echo "<input type=\"hidden\" name=\"pickupTime\" value=\"".$record["pickupTime"]."\" /> ";
+                echo "<input type=\"hidden\" name=\"pickupTime\" value=\"".$record["pickUpTime"]."\" /> ";
+                //echo "<input type=\"hidden\" name=\"status\" value=\"".$record["status"]."\" /> ";
                 //echo "<input type=\"hidden\" name=\"freeToll\" value=\"".$record["freeToll"]."\" /> ";
-                echo "<input type=\"hidden\" name=\"tips\" value=\"".$record["status"]."\" /> ";*/
-                }
+                echo "<input type=\"hidden\" name=\"tips\" value=\"".$record["status"]."\" /> ";
+                echo "<td>".$record["passengerName"]."</td><td>".$record["driverName"]."</td><td>";
+                echo $record["startingLocation_lat"]."</td><td>".$record["destination_lat"]."</td>";
+                echo "<td>".$record["pickUpTime"]."</td><td>";
+                echo "<td>".$record["status"]."</td><td>";
+                $_SESSION["status"] = $record["status"];
+                echo "<td><input type=\"submit\" name=\"cancel"\" class=\"btn btn-primary mx-auto\" value=\"Cancel\"></td>";
+                echo "<td><input type=\"submit\" name=\"startride\" class=\"btn btn-primary mx-auto\" value=\"StartRide\"></td>";
+                //echo "<td><input type=\"submit\" name=\"Complete\" class=\"btn btn-primary mx-auto\" value=\"Complete\"></td></tr>";
+                echo "</form>";
+            /*echo "<input type=\"hidden\" name=\"passenger\" value=\"".$record["passengerName"]."\" /> ";
 
+            echo "<input type=\"hidden\" name=\"startingLocation_addr\" value=\"".$record["startingLocation_lat"]."\" /> ";
+            echo "<input type=\"hidden\" name=\"destination_addr\" value=\"".$record["destination_lat"]."\" /> ";
+            echo "<input type=\"hidden\" name=\"pickupTime\" value=\"".$record["pickupTime"]."\" /> ";
+            //echo "<input type=\"hidden\" name=\"freeToll\" value=\"".$record["freeToll"]."\" /> ";
+            echo "<input type=\"hidden\" name=\"tips\" value=\"".$record["status"]."\" /> ";*/
             }
-                
         }
     }
 }
+
+unset($stmt);
+unset($pdo);
 
 ?>
             </form>
