@@ -21,24 +21,35 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     }
 }*/
 
-$sql = "SELECT username FROM drivers WHERE username = :username";
+if(isset($_SESSION['driver']))
+{
+    $sql = "SELECT username FROM drivers WHERE username = :username";
 
-if($stmt = $pdo->prepare($sql)){
-    // Bind variables to the prepared statement as parameters
-    $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
+    if($stmt = $pdo->prepare($sql)){
+        // Bind variables to the prepared statement as parameters
+        $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
 
-    // Set parameters
-    $param_username = $_SESSION["username"];
+        // Set parameters
+        $param_username = $_SESSION["username"];
 
-    if($stmt->execute()){
-        if($stmt->rowCount() == 1){
-            $_SESSION["drivers"] = true;
-        } else{
-            $_SESSION["drivers"] = false;
-            header("location: register.php");
+        if($stmt->execute()){
+            if($stmt->rowCount() == 1){
+                $_SESSION["drivers"] = true;
+            } else{
+                $_SESSION["drivers"] = false;
+                header("location: register.php");
+                exit;
+            }
         }
     }
 }
+else
+{ 
+    if(isset($_SESSION['status']))
+}
+
+unset($stmt);
+unset($pdo);
 
 ?>
 <!DOCTYPE html>

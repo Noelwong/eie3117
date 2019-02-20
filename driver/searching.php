@@ -123,12 +123,6 @@ if(isset($_POST['passenger']))
 
         if($stmt1->execute())
         {
-            $_SESSION['passenger'] = $_POST['passenger'];
-            $_SESSION['startingLocation_addr'] = $_POST['startingLocation_addr'];
-            $_SESSION['destination_addr'] = $_POST['destination_addr'];
-            $_SESSION['pickupTime'] = $_POST['pickupTime'];
-            $_SESSION['freeToll'] = $_POST['freeToll'];
-            $_SESSION['tips'] = $_POST['tips'];
             header("location: home.php");
             exit;
         }
