@@ -21,7 +21,7 @@
   - drivers
     - username, carClass, carModel, carPlateNum, profileImg (*photo address)
   - history
-    - requestId, passengerName, driverName, startingLocation (*address), destinationLocation (*address), pickupTime (*date+time), tips, freeToll, status (*1-confirmed, 2-cancelle, 3-started, 4-completed)
+    - requestId, passengerName, driverName, startingLocation (*address), destinationLocation (*address), pickupTime (*date+time), tips, freeToll, status (*1-confirmed, 2-cancelled, 3-started, 4-completed)
   - passenger
     - username, homeLocation, workLocation
   - pending
