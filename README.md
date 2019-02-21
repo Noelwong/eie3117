@@ -28,3 +28,6 @@
     - pendingId, passenger, startingLocation_addr, startingLocation_placeId, destination_addr, destination_placeId, pickupTime, freeToll, tips
   - users
     - userId, username, password (*hash), phoneNumber, email, verified, verfication_code, created_at
+
+## 3. unfinish function
+ - 
