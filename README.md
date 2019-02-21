@@ -30,4 +30,4 @@
     - userId, username, password (*hash), phoneNumber, email, verified, verfication_code, created_at
 
 ## 3. unfinish function
- - 
+ - upload profile image
