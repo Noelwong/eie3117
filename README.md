@@ -5,7 +5,8 @@
  - [loggedin] // true/false // logged in or not
  - [id] // (id) // current lodin user's id
  - [verified] // 1/0 // verified account or not
- - [requestIdendity] // passenger/driver // current request status
+ - [requestIdendity] // passenger/driver // current request indentity
+ - [status] // 1-pending, 2-accepted, 3-started ride // current request status
  - [driver] // ture/false // current user registered driver or not
  - ~~current request identifier~~
    - ~~[passenger]~~
