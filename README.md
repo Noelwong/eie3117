@@ -31,4 +31,8 @@
     - userId, username, password (*hash), phoneNumber, email, verified, verfication_code, created_at
 
 ## 3. unfinish function
- - upload profile image
+ - upload and display profile image
+ - calculate route distance 
+ - calculate total charge
+ - free toll option
+ - better UI (history, current request)
